@@ -103,6 +103,12 @@ Podemos utilizar ? juntamente com um comando para ver as proximas instruções
 
 
 	-> Comandos de Verificações:
+		Comandos Show:
+			Layer 1 (física): show controllers
+			Layer 2 (enlace): show interfaces
+			Layer 3 (rede)  : show ip interface
+					  show ipv6 interface
+
 		Exibe informação sobre a versão do software Cisco IOS em execução e informação do hardwarer
 			Switch>_'enable'
 			Switch#_'show version'
