@@ -175,27 +175,32 @@ Podemos utilizar ? juntamente com um comando para ver as proximas instruções
 
 	-> Retornando para a configuração de fabrica (apaga toda a configuração)
 		Switch>_'enable'
+		Switch>_'conf terminal'
 		Switch#_'erase startup-config' (será pedido a confirmação para execução do comando, aceitar precionando ENTER))
 		o equipamento será reiniciado
 
 
 
-	-> Mostra informação MAC do switch
-		Switch>_'enable'
-		Switch#_'conf terminal'
+	-> Exibir endereço MAC de uma interface no switch
 		Switch>_'show interface F0/1'	->ENTER
 
 	-> Exiba a tabela de endereços MAC no switch
-		Switch>_'enable'
-		Switch#_'conf terminal'
 		Switch>_'show mac address-table'  ->ENTER
 
 
 	-> Limpar a tabela de endereços MAC no switch
-		Switch>_'enable'
-		Switch#_'conf terminal'
 		Switch>_'clear mac address-table'  ->ENTER  (após 10s a tabela será recadastrada novamente)
 
+
+	-> Exibir a tabela de endereço MAC no Router
+		Router>_'enable'
+		Router#_'conf terminal'
+		Router#_'show mac-address-table'
+
+	-> Exibir informação ARP de solicitações de PDU na rede atual
+		Router>_'enable'
+		Router#_'conf terminal'
+		Router#_'show arp'	 
 
 	-> Exibindo a tabela de roteamento IPv4 de um Roteador
 		Router>_'enable'
