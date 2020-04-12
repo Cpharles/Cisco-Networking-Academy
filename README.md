@@ -1,3 +1,5 @@
+<img src="screenshots/ccna_routerswitching_large.gif" alt="alt text" width="300" height="300">
+
 ![ccna Logo](http://www.dltec.com.br/blog/wp-content/uploads/2014/07/ccna_routerswitching_large.gif)
 
 # Cisco-Networking-Academy
