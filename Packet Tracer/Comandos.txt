@@ -35,6 +35,7 @@ Podemos utilizar ? juntamente com um comando para ver as proximas instruções
 			Switch#_'conf terminal'
 			Switch(config)#_'line console 0'   ('0' indica o num. da porta do console, normalmente só temos 1)
 			Switch(config-line)#_'password [coloque a senha]'
+			Switch(config-line)#_'exec-timeout 30' (opcional: sai após 30seg)
 			Switch(config-line)#_'login'   (é necessário para ativar o acesso pelo password)
 			Switch(config-line)#_'exit'
 			Switch(config)#_'exit'
@@ -81,6 +82,7 @@ Podemos utilizar ? juntamente com um comando para ver as proximas instruções
 		Switch#_'conf terminal'
 		Switch(config)#_'interface vlan 1'
 		Switch(config-if)#_'ip address [IP address] [Mask]'    exemplo.:192.168.1.10 255.255.255.0
+		Switch(config-if)#_'description [texto]'	exemplo: texto - Link to LAN-10
 		Switch(config-if)#_'no shutdown' (para ativar a interface virtual no caso o VLAN 1, por padrão esta desativada)
 		Switch(config-if)#_
 			%LINK-5-CHANGED: 'status'  (aparecer a mensagem indicando o status)
@@ -89,16 +91,17 @@ Podemos utilizar ? juntamente com um comando para ver as proximas instruções
 		Switch#_'show running-config' (mostra a configuração em execução e no final da menssagem é possivel ver dados do VLAN)
 		Switch#_'show ip interface brief' (exibe um resumo das interface do switch)
 
-		-> Para o acesso remoto o dispositivo atraves de um PC por Telnet/SSH na linha VTY(linha de terminal virtual)
-			Switch#_'conf terminal'
-			Switch(config)#_'line vty 0 15' (15 representa a quantidade de linhas do VTY disponivel no equipamento)
-			Switch(config-line)#_'password [coloque a senha]'
-			Switch(config-line)#_'login'
-			Switch(config-line)#_'transport input telnet'
-			Switch(config-line)#_'exit'
-			Switch(config)#_'exit'
-			Switch#_'disable'
-			Switch>_
+	-> Para o acesso remoto o dispositivo atraves de um PC por Telnet/SSH na linha VTY(linha de terminal virtual)
+		Switch#_'conf terminal'
+		Switch(config)#_'line vty 0 15' (15 representa a quantidade de linhas do VTY disponivel no equipamento)
+		Switch(config-line)#_'password [coloque a senha]'
+		Switch(config-line)#_'exec-timeout 30' (opcional: sai após 30seg)
+		Switch(config-line)#_'login'
+		Switch(config-line)#_'transport input telnet'
+		Switch(config-line)#_'exit'
+		Switch(config)#_'exit'
+		Switch#_'disable'
+		Switch>_
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 	-> Configuração d o Gateway Padrão
