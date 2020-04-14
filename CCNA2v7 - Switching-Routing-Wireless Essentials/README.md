@@ -1,4 +1,4 @@
-<img src="screenshots/ccna_routerswitching_large.gif" alt="alt text" width="200" height="200">
+![logo](
 
 # Cisco-Networking-Academy
 
@@ -20,4 +20,4 @@
   learning institutions and individuals worldwide.
   
 ## CCNAv7
-  - [ ] Capitulo 1
+![indice](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/CCNA2.jpg)
