@@ -1,5 +1,4 @@
-<img src="screenshots/ccna_routerswitching_large.gif" alt="alt text" width="200" height="200">
-[logo](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/ccna_routerswitching_large.gif)
+![logo](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/ccna_routerswitching_large.gif)
 
 # Cisco-Networking-Academy
 
