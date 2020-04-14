@@ -1,4 +1,4 @@
-![logo](
+![logo](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/ccna_routerswitching_large.gif)
 
 # Cisco-Networking-Academy
 
@@ -19,5 +19,5 @@
   About Networking Academy: Started in 1997, Cisco Networking Academy is an IT & Networking skills and career building program for
   learning institutions and individuals worldwide.
   
-## CCNAv7
+## CCNAv7 - Conteúdo do curso:
 ![indice](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/CCNA2.jpg)
