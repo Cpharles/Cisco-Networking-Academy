@@ -18,6 +18,3 @@
   of devices, encouraging practice, discovery and troubleshooting.
   About Networking Academy: Started in 1997, Cisco Networking Academy is an IT & Networking skills and career building program for
   learning institutions and individuals worldwide.
-  
-## CCNAv7
-  - [ ] Capitulo 1
