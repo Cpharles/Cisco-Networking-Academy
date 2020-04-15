@@ -5,16 +5,21 @@
   * [Cisco Networking Academy](https://www.netacad.com/)
   * [Cisco Networking Academy Program - Wikipedia](https://it.wikipedia.org/wiki/Cisco_Networking_Academy_Program)
 
+- A Cisco Networking Academy é uma plataforma global que pode ser usada para inspirar alunos e instrutores a terem uma carreira brilhante. A Cisco Networking Academy coloca em prática a teoria e a experiência de trabalho
+
 - Procure o site oficial da Cisco Networking Academy no Facebook© e no LinkedIn©. A página do Facebook é onde você pode encontrar e interagir com outros alunos da Networking Academy de diferentes partes do mundo. O site da Cisco Networking Academy no LinkedIn conecta você a anúncios de empregos e ainda é possível ver como os outros estão efetivamente comunicando suas habilidades.
 
+
 ## Cisco Packet Tracer
-  * [Packet Tracer](https://www.netacad.com/courses/packet-tracer)
+
+  * [Packet Tracer](https://www.netacad.com/pt-br/courses/packet-tracer)
+  * [Treinamento - Introdução ao Packet Tracer](https://www.netacad.com/pt-br/courses/packet-tracer/introduction-packet-tracer)
   
-  About Packet Tracer
-  Cisco developed Packet Tracer to help Networking Academy students achieve the most optimal learning experience while gaining practical 
-  networking technology skills.
-  Packet Tracer is a powerful network simulation platform inspiring students to experiment with network behavior and ask 'what if'
-  questions. It supplements physical equipment in the classroom by allowing students to create a network with an almost unlimited number
-  of devices, encouraging practice, discovery and troubleshooting.
-  About Networking Academy: Started in 1997, Cisco Networking Academy is an IT & Networking skills and career building program for
-  learning institutions and individuals worldwide.
+
+  **Sobre o Packet Tracer**
+
+  A Cisco desenvolveu o Packet Tracer para ajudar os alunos da Networking Academy a ter a melhor experiência de aprendizagem possível enquanto obtêm habilidades práticas de tecnologia de rede.
+
+O Packet Tracer é uma plataforma de simulação de rede eficiente que inspira os alunos a praticar segundo o comportamento da rede e fazer perguntas sobre o que pode vir a acontecer. Ao disponibilizar equipamentos reais em sala de aula, o curso permite que os alunos criem uma rede com inúmeros dispositivos, incentivando a prática de situações concretas, a descoberta de alternativas possíveis e a solução de problemas.
+
+Sobre a Networking Academy: A Cisco Networking Academy, lançada em 1997, é um programa de desenvolvimento de habilidades profissionais e carreiras no setor de TI e redes para instituições de ensino e indivíduos em todo o mundo.
