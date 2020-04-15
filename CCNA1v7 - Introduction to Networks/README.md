@@ -1,23 +1,17 @@
 ![logo](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/ccna_routerswitching_large.gif)
 
-# Cisco-Networking-Academy
+# CCNA1: Introduction to Networks
 
-  * [Cisco Networking Academy](https://www.netacad.com/)
-  * [Cisco Networking Academy Program - Wikipedia](https://it.wikipedia.org/wiki/Cisco_Networking_Academy_Program)
-
-- Procure o site oficial da Cisco Networking Academy no Facebook© e no LinkedIn©. A página do Facebook é onde você pode encontrar e interagir com outros alunos da Networking Academy de diferentes partes do mundo. O site da Cisco Networking Academy no LinkedIn conecta você a anúncios de empregos e ainda é possível ver como os outros estão efetivamente comunicando suas habilidades.
-
-## Cisco Packet Tracer
-  * [Packet Tracer](https://www.netacad.com/courses/packet-tracer)
+  * Acesse o link -> [CCNA1](https://www.netacad.com/pt-br/courses/networking/ccna-introduction-networks)
   
-  About Packet Tracer
-  Cisco developed Packet Tracer to help Networking Academy students achieve the most optimal learning experience while gaining practical 
-  networking technology skills.
-  Packet Tracer is a powerful network simulation platform inspiring students to experiment with network behavior and ask 'what if'
-  questions. It supplements physical equipment in the classroom by allowing students to create a network with an almost unlimited number
-  of devices, encouraging practice, discovery and troubleshooting.
-  About Networking Academy: Started in 1997, Cisco Networking Academy is an IT & Networking skills and career building program for
-  learning institutions and individuals worldwide.
+
+- **Primeiro passo para uma carreira na área de redes**
+Comece a se preparar para uma carreira na área de redes com esta introdução.  Este primeiro curso de uma série de três cursos do CCNA apresenta arquiteturas, modelos, protocolos e elementos de rede, que são funções necessárias para apoiar as operações e as prioridades das empresas da Fortune 500 para pequenos varejistas inovadores. Você ainda terá a chance de criar redes de área local (LANs) simples.  Você terá conhecimento funcional de esquemas de endereçamento IP e segurança básica de rede e poderá realizar configurações básicas para roteadores e switches. Nenhum pré-requisito é necessário.
+
+![carga](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/carga70hs.jpg)
+![nivel](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/nivel.jpg)
+![tipo](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/aprendizagem.jpg)
+
   
 ## CCNAv7 - Conteúdo do curso:
 ![Indice](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/screenshots/CCNA1.jpg)

@@ -86,13 +86,16 @@
 		Switch#_'conf terminal'
 		Switch(config)#_'interface vlan 1'
 		Switch(config-if)#_'ip address [IP address] [Mask]'    exemplo.:192.168.1.10 255.255.255.0
-		Switch(config-if)#_'description [texto]'	exemplo: texto - Link to LAN-10
+		Switch(config-if)#_'ipv6 address [IPv6 address]'       exemplo.:2001:db8:acad:99::1/64
+		Switch(config-if)#_'description [texto]'	       exemplo: texto - Link to LAN-10
 		Switch(config-if)#_'no shutdown' (para ativar a interface virtual no caso o VLAN 1, por padrão esta desativada)
 			%LINK-5-CHANGED: 'status'  (aparecer a mensagem indicando o status)
 		Switch(config-if)#_'exit'
 		Switch(config)#_'exit'
 		Switch#_'show running-config' (mostra a configuração em execução e no final da menssagem é possivel ver dados do VLAN)
 		Switch#_'show ip interface brief' (exibe um resumo das interface do switch)
+		Switch#_'show ipv6 interface brief'
+
 
 	-> CONFIGURAÇÃO DA VTY (linha de terminal virtual):
 		(Para o acesso remoto o dispositivo atraves de um PC por Telnet/SSH)
@@ -162,6 +165,12 @@
 		Exibe informação sobre a versão do software Cisco IOS em execução e informação do hardwarer
 			Switch>_'enable'
 			Switch#_'show version'
+			Switch#_'disable'
+			Switch>_
+
+		Exibe informação para ver como está definido o arquivo de inicialização do IOS atual
+			Switch>_'enable'
+			Switch#_'show boot'
 			Switch#_'disable'
 			Switch>_
 
