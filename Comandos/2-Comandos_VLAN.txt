@@ -1,0 +1,143 @@
+****************************************  RESUMO DOS PRINCIPAIS COMANDOS - VLANs   ********************************************************
+*******************************************************************************************************************************************
+
+-> Hierarquia de acesso aos modos(níveis) no IOS(sistema operacional do aparelho, mesma logica para router ou switch):
+	- Estes são os modos (níveis) de acesso:
+		EXEC ----------------switch>
+		EXEC PRIV -----------switch#
+		CONFIG GLOBAL -------switch(config)#
+		CONFIG ESPECÍFICO ---switch(config-if)#
+
+	- Os comando para passar (acessar os níveis) de um modo para outro:
+		EXEC ----------------"name quip"> 'enable'
+		EXEC PRIV -----------"name quip"# 'config terminal'
+		CONFIG GLOBAL -------"name quip"(config)# 'interface [f0/1]'
+		CONFIG ESPECÍFICO ---"name quip"(config-if)#  (este é o ultimo modo de acesso)
+
+		OBS: Temos a opção de utilizar a tecla TAB para completar o preenchimento do comando
+	   	     Podemos utilizar ? juntamente com um comando para ver as próximas instruções
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> Tipos mais comuns de VLANs em sub-redes:
+     1-VLAN padrão: mais conhecido como VLAN1 e por padrão todas as portas estão atribuidas a VLAN padrão
+	
+     2-VLAN de dados ou de usuários: fornece a segmentação para redes em grupos de usuários ou dispositivos
+		
+     3-VLANnativa : viabiliza que equipamentos que não tem a função da identificação de trafegos possa operar e gerar 			informação dentro de uma VLAN operando atraves do protocolo IEEE 802.1Q
+
+     4-VLAN de gerenciamento: tráfego de gerenciamento de rede, incluindo SSH, Telnet, HTTPS, HHTP e SNMP, por padrão è VLAN1
+
+     5-VLAN de voz: para dar suporte ao Voice over IP (VoIP)
+	
+
+-> Tipo de acesso em uma VLAN Nativa
+	A porta que sai do switch e esta atribuida a uma VLAN1/2/3... para fornecer rede aos hosts é denomidado de:
+		ACESSO (UNtagged): que pertence a 1 única VLAN
+
+	A porta de comunicação entre os switch, ou switch>rub>switch é denominado de:
+		TRUNK (Tagged): que pertence a todas as VLANs (por padrão) que trafegam de uma rede para outra
+
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> CONFIGURAÇÃO DAS VLANs
+	(esta configuração é feito no modo global)
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'vlan [vlan-id_10/20/30...]  (cria a Vlan com um numero valido. Aqui pode colocar todas as vlan desejada)
+	Switch(config-vlan)#_'name [vlan-name]   (especifica um nome para a Vlan)
+	Switch(config-vlan)#_'exit'
+-> CONFIGURANDO O ENDEREÇAMENTO DAS POSTAS PARA A VLAN
+	Switch(config)#_'interface [interface-id_fa0/XX]
+	Switch(config-if)#_'switchport mode access  (abilita o mode de acesso a porta vlan)
+	Switch(config-if)#_'switchport access vlan [vlan-id]  (enderessamento da porta)
+	Switch(config-if)#_'end'
+	Switch#_
+
+-> EXEMPLO DE CONFIGURAÇÃO DE UMA VLAN DATA E VOICE
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'vlan 20'
+	Switch(config-vlan)#_'name studante'
+	Switch(config)#_'vlan 20'
+	Switch(config-vlan)#_'name voice'
+	Switch(config-vlan)#_'exit'
+	Switch(config)#_'interface fa0/18'
+	Switch(config-if)#_'switchport mode access
+	Switch(config-if)#_'switchport access vlan 20
+	Switch(config-if)#_'mls qos trust cos'
+	Switch(config-if)#_'switchport voice vlan 150'
+	Switch(config-if)#_'end'
+	Switch#_'show interfaces fa0/1 switchport'  (exibe a configuração atual do trunk)
+
+-> CONFIGURANDO AS PORTAS TRUNK:
+	(o link Trunk estão no layer 2 e transporta o trafeco de todas as vlan permitida)
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'interface [interface-id]
+	Switch(config-if)#_'switchport mode trunk  (abilita o mode de acesso trunk)
+	Switch(config-if)#_'switchport trunk native vlan [vlan-id]  (enderessamento da porta)
+	Switch(config-if)#_'switchport trunk allowed vlan [vlan-list] (especifica a lista de vlan permitido a ter acesso pelo link trunk)
+	Switch(config-if)#_'end'
+	Switch#_'show interfaces fa0/1 switchport'  (exibe a configuração atual do trunk)
+	-> EXEMPLO DE CONFIGURAÇÃO:
+		S1(config)# interface fastEthernet 0/1
+		S1(config-if)# switchport mode trunk
+		S1(config-if)# switchport trunk native vlan 99
+		S1(config-if)# switchport trunk allowed vlan 10,20,30,99
+		S1(config-if)# end
+
+-> RESET O LINK TRUNK PARA MODO PADRÃO:
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'interface [interface-id]'
+	Switch(config-if)#_'no switchport trunk allowed vlan'
+	Switch(config-if)#_'no switchport trunk native vlan'
+	Switch(config-if)#_'end'
+
+-> REMOVENDO O LINK TRUNK DE UMA PORTA:
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_interface [interface-id]'
+	Switch(config-if)#_'switchport mode access'
+	Switch(config-if)#_'end'
+	Switch#_'show interfaces fa0/1 switchport'  (exibe a configuração atual da vlan)
+
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> EXIBE QUAIS PORTAS ESTÃO ATRIBUIDAS AS VLANs:
+	Switch>_'enable'
+	Switch#_'show vlan brief'
+
+-> EXIBE INFORMAÇÕES DE UMA INTERFACE ESPECIFICA ATRIBUIDA A UMA VLAN [1 - 4094]:
+	Switch>_'enable'
+	Switch#_'show interfaces [interface-id] switchport'
+
+-> EXIBE INFORMAÇÃO SOBRE A IDENTIFICAÇÃO DA VLAN:
+	Switch>_'enable'
+	Switch#_'name [vlan-name]'
+
+-> EXIBE UM RESUMO DAS INFORMAÇÕES DA VLAN:
+	Switch>_'enable'
+	Switch#_'summary'
+
+-> EXIBE OS ARQUIVOS GRAVADOS NA MEMORIA FLASH:
+	Switch>_'enable'
+	Switch#_'show flash'
+	
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> APAGA CONFIGURAÇÃO DE STARTUP DO SWITCH:
+	Switch>_'enable'
+	Switch#_'erase startup-config'
+	Switch#_'reload'
+
+-> APAGA O ARQUIVO "vlan.dat" DA MEMORIA DO SWITCH:
+	Switch>_'enable'
+	Switch#_'delete flash:vlan.dat'
+	Switch#_'reload'
+		OBS: se executar o comando 'delete flash:' será apagado todos os arquivos da memoria flash incluindo o IOS
+
+
+
+
+

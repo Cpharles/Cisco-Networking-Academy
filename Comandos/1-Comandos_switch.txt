@@ -1,0 +1,285 @@
+***********************************************  RESUMO DOS PRINCIPAIS COMANDOS DE ACESSO  ************************************************
+*******************************************************************************************************************************************
+
+-> Hierarquia de acesso aos modos(níveis) no IOS(sistema operacional do aparelho, mesma logica para router ou switch):
+	->Estes são os modos (níveis) de acesso:
+		EXEC ----------------switch>
+		EXEC PRIV -----------switch#
+		CONFIG GLOBAL -------switch(config)#
+		CONFIG ESPECÍFICO ---switch(config-if)#
+
+	->Os comando para passar (acessar os níveis) de um modo para outro:
+		EXEC ----------------"name quip"> 'enable'
+		EXEC PRIV -----------"name quip"# 'config terminal'
+		CONFIG GLOBAL -------"name quip"(config)# 'interface [f/g0/X]'
+		CONFIG ESPECÍFICO ---"name quip"(config-if)#  (este é o ultimo modo de acesso)
+
+	OBS:
+	   Temos a opção de utilizar a tecla TAB para completar o preenchimento do comando
+	   Podemos utilizar ? juntamente com um comando para ver as próximas instruções
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> COLOCANDO NOME NO HOST - Hostname:
+	Switch>_'enable'
+	Switch#_'conf terminal'
+	Switch(config)#_'hostname [coloque o nome]'
+	Switch(config)#_'exit'
+	Switch#_'disable'
+	Switch>_
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> CCONFIGURAÇÃO DE SENHAS:
+	MODO EXEC-USUÁRIO:
+		Switch>_'enable'
+		Switch#_'conf terminal'
+		Switch(config)#_'line console 0'   ('0' indica o num. da porta do console, normalmente só temos 1)
+		Switch(config-line)#_'password [coloque a senha]'
+		Switch(config-line)#_'exec-timeout 30' (opcional: sai após 30seg)
+		Switch(config-line)#_'login'   (é necessário para ativar o acesso pelo password)
+		Switch(config-line)#_'exit'
+		Switch(config)#_'exit'
+		Switch#_'show running-config' (verifique a senhas em texto simples no relatorio)
+		Switch#_'disable'
+		Switch>_
+
+	CRIPTOGRAFANDO TODAS AS SENHAS:
+	(Essa criptografia se aplica apenas às senhas no arquivo de configuração, )
+		Switch(config)#_'service password-encryption' (primeiro fazer a senha no comando anterior)
+		Switch(config)#_'exit'
+		Switch#_'show running-config' (para verificar se teve sucesso na criptografia da senha)
+		Switch#_'disable'
+		Switch>_
+		
+	MODO EXEC-PRIVILEGIADO:
+		Switch>_'enable'
+		Switch#_'conf terminal'
+		Switch(config)#_'enable password [coloque a senha]' (c/ esta sintax a senha ñ esta criptografada) 
+		Switch(config)#_'exit'
+		Switch#_'show running-config' (verifique a senhas em texto simples no relatorio)
+		Switch#_'disable'
+		Switch>_
+		Criptografando acesso ao modo privilegiado (mais seguro):
+			Switch(config)#_'enable secret [coloque a senha]' (esta senha sobrepõem a anterior)
+			Switch(config)#_'exit'
+			Switch#_'show running-config' (verificar se teve sucesso na criptografia da senha)
+			Switch#_'disable'
+			Switch>_
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> INSERINDO BANNER (aviso de acesso) no switch
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'banner motd # [texto] #' (# indica delimitação de caracteres, pode usar varias linhas de instrução)
+	Switch(config)#_'exit'
+	Switch#_'disable'
+	Switch>_
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> CONFIGURAÇÃO DA SVI (Interface Virtual de Switch) - VLan1:
+	(para acessar o switch remotamente é necessário configurar a SVI, atraves de um endereço IP e uma mascara de sub-rede)
+	Switch>_'enable'
+	Switch#_'conf terminal'
+	Switch(config)#_'interface vlan 1'
+	Switch(config-if)#_'ip address [IP address] [Mask]'    exemplo.:192.168.1.10 255.255.255.0
+	Switch(config-if)#_'ipv6 address [IPv6 address]'       exemplo.:2001:db8:acad:99::1/64
+	Switch(config-if)#_'description [texto]'	       exemplo: texto - Link to LAN-10
+	Switch(config-if)#_'no shutdown' (para ativar a interface virtual no caso o VLAN 1, por padrão esta desativada)
+	Switch(config-if)#_'exit'
+	Switch(config)#_'exit'
+	Switch#_'show running-config' (mostra a configuração em execução e no final da menssagem é possivel ver dados do VLAN)
+	Switch#_'show ip interface brief' (exibe um resumo das interface do switch)
+	Switch#_'show ipv6 interface brief'
+
+
+-> CONFIGURAÇÃO DA VTY (linha de terminal virtual):
+	(Para o acesso remoto o dispositivo atraves de um PC por Telnet/SSH)
+	Switch#_'conf terminal'
+	Switch(config)#_'line vty 0 15' (0 15 representa a quantidade de linhas do VTY disponivel no equipamento)
+	Switch(config-line)#_'password [coloque a senha]'
+	Switch(config-line)#_'exec-timeout 30' (opcional: sai após 30seg)
+	Switch(config-line)#_'login'
+	Switch(config-line)#_'transport input telnet' (tipo de conectividade)
+	Switch(config-line)#_'exit'
+	Switch(config)#_'exit'
+	Switch#_'disable'
+	Switch>_
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> CONFIGURAÇÃO DO GATEWAY PADRÃO:
+	(O endereço IP configurado é aquele da interface do roteador a qual o switch está conectado)
+	Switch>_'enable'
+	Switch#_'conf terminal'
+	Switch(config)#_'ip default-gateway [IP]'
+	Switch(config)#_'exit'
+	Switch#_
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+*****   ROTEADOR   *****
+-> CONFIGURAÇÃO DA INTERFACE:
+	Router>_'enable'
+	Router#_'conf terminal'
+	Router(config)#_'interface [fastethernet/gigabitethernet 0/0]'
+	Router(config-if)#_'ip address [IP address] [Mask]'    exemplo.:192.168.1.10 255.255.255.0
+	Router(config-if)#_'description [texto]'	exemplo: texto - Link to LAN-10
+	Router(config-if)#_'no shutdown' (para ativar a interface)
+	Router(config-if)#_'exit'
+	Router(config)#_'exit'
+	Router#_show ip interface brief (exibe um resumo das interfaces do router)
+
+-> CONFIGURAÇÃO DA VTY (linha de terminal virtual):
+	(Para o acesso remoto o dispositivo atraves de um PC por Telnet/SSH
+	Router#_'conf terminal'
+	Router(config)#_'line vty 0 4' (0 4 representa a quantidade de linhas do VTY disponivel no equipamento)
+	Router(config-line)#_'password [coloque a senha]'
+	Router(config-line)#_'exec-timeout 30' (opcional: sai após 30seg)
+	Router(config-line)#_'login'
+	Router(config-line)#_'transport input telnet'
+	Router(config-line)#_'exit'
+	Router(config)#_'exit'
+	Router#_'disable'
+	Router>_
+
+
+-> Comandos de Verificações:
+	Router#_'show ip route'     (Exibe o conteúdo da tabela de roteamento IPv4 armazenada na RAM)
+	Router#_'show ip interface' (Exibe estatísticas de IPv4 para todas as interfaces em um roteador)
+	Router#_'show interfaces'   (Exibe a estatística de todas as interfaces no dispositivo)
+	Router#_'show interfaces [serial/fastethernet/gigabitethernet 0/0]' (Exibe informação de uma interface especifica)
+	Router#_show ip interface brief (exibe um resumo das interfaces do router)	
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> COMANDOS DE VERIFICAÇÕES E RELATÓRIOS:
+	Comandos Show:
+		Layer 1 (física): show controllers
+		Layer 2 (enlace): show interfaces
+		Layer 3 (rede)  : show ip interface
+				  show ipv6 interface
+
+	Exibe informação sobre a versão do software Cisco IOS em execução e informação do hardwarer
+		Switch>_'enable'
+		Switch#_'show version'
+		Switch#_'disable'
+		Switch>_
+
+	Exibe informação para ver como está definido o arquivo de inicialização do IOS atual
+		Switch>_'enable'
+		Switch#_'show boot'
+		Switch#_'disable'
+		Switch>_
+
+	Exibe informações resumido das interfaces do equipamento:
+		Switch>_'enable'
+		Switch#_'show ip int br'
+		Switch#_'disable'
+		Switch>_
+	
+	Exibe informação do arquivo de configuração atual que esta em uso:
+		Switch>_'enable'
+		Switch#_'show running-config'(exibe a configuração atual que esta na RAM)
+		Switch#_'disable'
+		Switch>_
+			running-config: O arquivo armazenado na RAM que reflete a configuração atual. A modificação de uma configuração
+		 	ativa afeta o funcionamento de um dispositivo Cisco imediatamente. A RAM é uma memória volátil.
+			Ela perde todo o seu conteúdo quando o dispositivo é desligado ou reiniciado.
+
+	Exibe informação do arquivo de configuração de inicialização que foi gravada na NVRAM:
+		Switch>_'enable'
+		Switch#_'show startup-config'(exibe a configuração de inicialização que esta na NVRAM)
+		Switch#_'disable'
+		Switch>_
+			startup-config: O arquivo armazenado na NVRAM que contém todos os comandos que serão usados pelo dispositivo
+	 		na inicialização ou reinicialização. A NVRAM não perde seu conteúdo quando o dispositivo é desligado
+
+	Exibe a data atual no equipamento
+		Switch>_'enable'
+		Switch#_'show clock'
+			para ajustar a data/hora no equipamento
+			Switch#_'clock set 00:00:00 D M A  (se estiver com dúivida coloque a ? no final da sintax)
+
+	Exibir endereço MAC de uma interface no switch
+		Switch>_'show interface [F0/1]'	->ENTER
+
+	Exiba a tabela de endereços MAC no switch
+		Switch>_'show mac address-table'  ->ENTER
+
+	Limpar a tabela de endereços MAC no switch
+		Switch>_'clear mac address-table'  ->ENTER  (após 10s a tabela será recadastrada novamente)
+
+	Exibir a tabela de endereço MAC no Router
+		Router>_'enable'
+		Router#_'conf terminal'
+		Router#_'show mac-address-table'
+
+	Exibir informação ARP de solicitações de PDU na rede atual
+		Router>_'enable'
+		Router#_'conf terminal'
+		Router#_'show arp'	 
+
+	Exibindo a tabela de roteamento IPv4 de um Roteador
+		Router>_'enable'
+		Router#_'conf terminal'
+		Router#_'show ip router'
+
+	Encerrar uma operação traceroute
+		utilizar as teclas Ctrl+Shift+6
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> GRAVANDO AS CONFIGURAÇÕES NA MEMORIA:
+	NVRAM
+	(Evitando a perda das alterações feitas mesmo que o sistema seja reiniciado ou tenha uma queda de energia)
+		Switch>_'enable'
+		Switch#_'copy running-config startup-config'    ou somente   'write'
+		Switch#_'disable'
+		Switch>_
+
+	FLASH
+	(Seria um backup extra. Por padrão, o roteador carrega a configuração inicial da NVRAM. No entanto,
+	 se a NVRAM for corrompida, você poderá restaurar a configuração inicial copiando-a da memória flash.)
+		Switch>_'enable'
+		Switch#_'copy startup-config flash'
+		Switch#_'disable'
+		Switch>_
+		Exibe o conteúdo da memoria flesh
+			Switch#_'show flash'
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+-> RECUPERANDO A ULTIMA CONFIGURAÇÃO ATIVA:
+	(Isso só é possivel se a configuração atual ainda não tenha sido gravada na VRAM)
+	Switch>_'enable'
+	Switch#_'reload' (para restaurar a ultima configuração de inicialização)
+
+-> APAGA CONFIGURAÇÃO DE STARTUP DO SWITCH (apaga toda a configuração):
+	Switch>_'enable'
+	Switch#_'erase startup-config'
+	Switch#_'reload'
+
+-> APAGA O ARQUIVO DE CONFIGURAÇÃO DA MEMORIA FLASH DO SWITCH:
+	Switch>_'enable'
+	Switch#_'delete flash:[config.text]'   (ou delete [config.text])
+	Switch#_'reload'
+		OBS: se executar o comando 'delete flash:' será apagado todos os arquivos da memoria flash incluindo o IOS
+
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+	No terminal do Desktop:
+		Limpar a tabela ARP
+		> arp -d
+
+		Exibindo a tabela ARP
+		> arp -a
+
+		Exibindo a tabela de roteamento IPv4 de um PC
+		> netstat -r     ou     route print
+
+
+Obs.: Quando vamos acessar um Switch/Router via terminal, nos temos que utilizar um cabo (azul) de comunicação (DB9/RJ45), ligando no porta RS232 (serial) do PC com com a porta console do equipamento. E para entrar com os comando, utilizamos um programa de emulação "Putty"
+Lembrando que em um ambiente de trabalho onde temos vários terminais, não fazemos o acesso do switch via console, o correto é utilizarmos o acesso via rede. O acesso via cabo pela porta console, é feito quando estamos fazendo a configuração inicial do equipamento no laboratório.
+
+
+
+
+
+
+
+
+
