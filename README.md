@@ -5,9 +5,9 @@
   * [Cisco Networking Academy](https://www.netacad.com/)
   * [Cisco Networking Academy Program - Wikipedia](https://it.wikipedia.org/wiki/Cisco_Networking_Academy_Program)
 
-- A Cisco Networking Academy é uma plataforma global que pode ser usada para inspirar alunos e instrutores a terem uma carreira brilhante. A Cisco Networking Academy coloca em prática a teoria e a experiência de trabalho
+A Cisco Networking Academy é uma plataforma global que pode ser usada para inspirar alunos e instrutores a terem uma carreira brilhante. A Cisco Networking Academy coloca em prática a teoria e a experiência de trabalho
 
-- Procure o site oficial da Cisco Networking Academy no Facebook© e no LinkedIn©. A página do Facebook é onde você pode encontrar e interagir com outros alunos da Networking Academy de diferentes partes do mundo. O site da Cisco Networking Academy no LinkedIn conecta você a anúncios de empregos e ainda é possível ver como os outros estão efetivamente comunicando suas habilidades.
+Procure o site oficial da Cisco Networking Academy no Facebook© e no LinkedIn©. A página do Facebook é onde você pode encontrar e interagir com outros alunos da Networking Academy de diferentes partes do mundo. O site da Cisco Networking Academy no LinkedIn conecta você a anúncios de empregos e ainda é possível ver como os outros estão efetivamente comunicando suas habilidades.
 
 
 ## Cisco Packet Tracer
