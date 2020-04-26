@@ -46,7 +46,7 @@
 	Switch(config)#_'vlan [vlan-id_10/20/30...]  (cria a Vlan com um numero valido. Aqui pode colocar todas as vlan desejada)
 	Switch(config-vlan)#_'name [vlan-name]   (especifica um nome para a Vlan)
 	Switch(config-vlan)#_'exit'
--> CONFIGURANDO O ENDEREÇAMENTO DAS POSTAS PARA A VLAN
+-> CONFIGURANDO O ENDEREÇAMENTO DAS POSTAS DE ACESSO PARA A VLAN
 	Switch(config)#_'interface [interface-id_fa0/XX]
 	Switch(config-if)#_'switchport mode access  (abilita o mode de acesso a porta vlan)
 	Switch(config-if)#_'switchport access vlan [vlan-id]  (enderessamento da porta)
@@ -75,14 +75,15 @@
 	Switch#_'config terminal'
 	Switch(config)#_'interface [interface-id]
 	Switch(config-if)#_'switchport mode trunk  (abilita o mode de acesso trunk)
-	Switch(config-if)#_'switchport trunk native vlan [vlan-id]  (enderessamento da porta)
-	Switch(config-if)#_'switchport trunk allowed vlan [vlan-list] (especifica a lista de vlan permitido a ter acesso pelo link trunk)
+	Switch(config-if)#_'switchport trunk native vlan [vlan-id]  (conf uma Vlan[ID] como sendo uma Vlan nativa)
+	Switch(config-if)#_'switchport trunk allowed vlan [vlan-list]
+			(especifica a lista de vlan permitido a ter acesso pelo link trunk, por padrão todas as velas já tem acesso pela 			trank, neste caso podemos limitar o acesso pela trank)
 	Switch(config-if)#_'end'
 	Switch#_'show interfaces fa0/1 switchport'  (exibe a configuração atual do trunk)
 	-> EXEMPLO DE CONFIGURAÇÃO:
-		S1(config)# interface fastEthernet 0/1
+		S1(config)# interface fastEthernet 0/1   (fazendo p/ + portas ao mesmo tempo: 'interface range g0/1 - 2')
 		S1(config-if)# switchport mode trunk
-		S1(config-if)# switchport trunk native vlan 99
+		S1(config-if)# switchport trunk native vlan 99  (esta atribuindo a Vlan 99 como sendo uma Vlan nativa)
 		S1(config-if)# switchport trunk allowed vlan 10,20,30,99
 		S1(config-if)# end
 
@@ -102,23 +103,39 @@
 	Switch(config-if)#_'end'
 	Switch#_'show interfaces fa0/1 switchport'  (exibe a configuração atual da vlan)
 
+-> REMOVENDO UMA PORTA DE UMA VLAN:
+	Switch>_'enable'
+	Switch#_'config terminal'
+	Switch(config)#_'interface [fa0/18]'
+	Switch(config)#_'no switchport access vlan'
+	Switch(config)#_'do show vlan brief'
+	Switch(config)#_'end'
+	Switch#_
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 -> EXIBE QUAIS PORTAS ESTÃO ATRIBUIDAS AS VLANs:
 	Switch>_'enable'
 	Switch#_'show vlan brief'
 
+-> EXIBE INFORMAÇÃO DA VLAN PELO NÚMERO DA REDE VLAN (ID):
+	Switch>_'enable'
+	Switch#_'show vlan id [id-number]
+
+-> EXIBE INFORMAÇÃO DA VLAN PELO NOME:
+	Switch>_'enable'
+	Switch#_'show vlan name [vlan-name]'
+
+-> EXIBE UM RESUMO DAS INFORMAÇÕES DA VLAN:
+	Switch>_'enable'
+	Switch#_'show vlan summary'
+
 -> EXIBE INFORMAÇÕES DE UMA INTERFACE ESPECIFICA ATRIBUIDA A UMA VLAN [1 - 4094]:
 	Switch>_'enable'
 	Switch#_'show interfaces [interface-id] switchport'
 
--> EXIBE INFORMAÇÃO SOBRE A IDENTIFICAÇÃO DA VLAN:
+-> EXIBE INFORMAÇÃO DA PORTA TRANK:
 	Switch>_'enable'
-	Switch#_'name [vlan-name]'
-
--> EXIBE UM RESUMO DAS INFORMAÇÕES DA VLAN:
-	Switch>_'enable'
-	Switch#_'summary'
+	Switch#_'show interfaces trank'
 
 -> EXIBE OS ARQUIVOS GRAVADOS NA MEMORIA FLASH:
 	Switch>_'enable'
