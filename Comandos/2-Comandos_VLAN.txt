@@ -23,7 +23,7 @@
 	
      2-VLAN de dados ou de usuários: fornece a segmentação para redes em grupos de usuários ou dispositivos
 		
-     3-VLANnativa : viabiliza que equipamentos que não tem a função da identificação de trafegos possa operar e gerar 			informação dentro de uma VLAN operando atraves do protocolo IEEE 802.1Q
+     3-VLANnativa : viabiliza que equipamentos que não tem a função da identificação de trafegos possa operar e gerar 					    informação dentro de uma VLAN operando atraves do protocolo IEEE 802.1Q
 
      4-VLAN de gerenciamento: tráfego de gerenciamento de rede, incluindo SSH, Telnet, HTTPS, HHTP e SNMP, por padrão è VLAN1
 
