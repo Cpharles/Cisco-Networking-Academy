@@ -1,6 +1,6 @@
 # Operação de Roteamento entre Vlnas
 
-**++Existem três opções de roteamento entre VLANs:++**
+**Existem três opções de roteamento entre VLANs:**
 1. Roteamento entre VLANs herdados:
 	:   Esta é uma solução herdada. Não escala bem.  "Este método de roteamento entre VLAN não é mais implementado em redes comutadas"
 2. Router-on-a-Stick:
@@ -15,7 +15,7 @@
   - **Etapa 4.** Configure portas de entroncamento.
  
 Cenario:
-![Minion](https://github.com/Cpharles/Cisco-Networking-Academy/CCNA2v7 - Switching-Routing-Wireless Essentials/Packet Tracer/Cap 4/screenshots/2-Router-on-a-Stick%20Scenario.jpg)
+![Router-on-a-Stick](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/CCNA2v7%20-%20Switching-Routing-Wireless%20Essentials/Packet%20Tracer/Cap%204/screenshots/2-Router-on-a-Stick%20Scenario.jpg)
 
 **Exemplo:**
 
@@ -61,6 +61,7 @@ S1(config-if)# switchport mode trunk
 S1(config-if)# no shut
 S1(config-if)# end
 ```
+
 **2.1. CONFIGURAÇÃO DA SUBINTERFACE NO ROTEADOR (R1):**
 O método ROUTER-ON-STICK exige que você crie uma subinterface para cada VLAN a ser roteada.
 - Entrar na interface
@@ -93,17 +94,18 @@ R1(config-if)# description Trunk link to S1
 R1(config-if)# no shut
 R1(config-if)# end
 ```
+
 **2.2. VERIFICAÇÃO DO ROTEAMENTO ROUTER-ON-STICK INTER-VLAN:**
 ```
-	R1# show ip route | begin Gateway
-	(Verifique se as subinterfaces estão aparecendo na tabela de roteamento do R1)
+R1# show ip route | begin Gateway
+(Verifique se as subinterfaces estão aparecendo na tabela de roteamento do R1)
 
-	R1# show ip interface brief | include up
-	(confirma que as subinterfaces têm o endereço IPv4 correto configurado e que estão operacionais.)
+R1# show ip interface brief | include up
+(confirma que as subinterfaces têm o endereço IPv4 correto configurado e que estão operacionais.)
 
-	R1# show interfaces g0/0/1.10
-	(Verificando as subinterfaces
+R1# show interfaces g0/0/1.10
+(Verificando as subinterfaces
 
-	S1# show interfaces trunk
-	(Verificar os links de trunk ativos em um switch da Camada 2)
+S1# show interfaces trunk
+(Verificar os links de trunk ativos em um switch da Camada 2)
 ```
