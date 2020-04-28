@@ -15,7 +15,7 @@
   - **Etapa 4.** Configure portas de entroncamento.
  
 Cenario:
-![Router-on-a-Stick](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/CCNA2v7%20-%20Switching-Routing-Wireless%20Essentials/Packet%20Tracer/Cap%204/screenshots/2-Router-on-a-Stick%20Scenario.jpg)
+![Router-on-a-Stick](https://github.com/Cpharles/Cisco-Networking-Academy/blob/master/CCNA2v7%20-%20Switching-Routing-Wireless%20Essentials/Packet%20Tracer/Cap%204/screenshots/2-Router-on-a-Stick%20Scenario.png)
 
 **Exemplo:**
 
