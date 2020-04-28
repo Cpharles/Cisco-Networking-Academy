@@ -104,7 +104,7 @@ Existem três opções de roteamento entre VLANs:
 
 3- ROTEAMENTO INTER-VLAN USANDO SWITCH LAYER 3:
 	(As redes empresariais modernas raramente usam o ROUTER-ON-STICK porque não são escaláveis ​​facilmente para atender aos requisitos.
-	Nessas redes muito grandes, os administradores de rede usam comutadores da camada 3 para configurar o roteamento entre VLANs.)
+	Nessas redes muito grandes, os administradores de rede usam switch da camada 3 para configurar o roteamento entre VLANs.)
 
 -> CONFIGURANDO UM SWITCH LAYER 3:
       Etapa 1 . Crie as VLANs.
@@ -113,26 +113,26 @@ Existem três opções de roteamento entre VLANs:
       Etapa 4 . Habilite o roteamento IP.
 
 	Etapa 1
-	  D1(config)# vlan [10]
-	  D1(config-vlan)# name [LAN10]
-	  D1(config-vlan)# vlan [20]
-	  D1(config-vlan)# name [LAN20]
-	  D1(config-vlan)# exit
+	  D1(config)#_'vlan [10]'
+	  D1(config-vlan)#_'name [LAN10]'
+	  D1(config-vlan)#_'vlan [20]'
+	  D1(config-vlan)#_'name [LAN20]'
+	  D1(config-vlan)#_'exit'
 	  D1(config)#
 
 	Etapa 2
 	(Configurar o SVI para VLANs. Os endereços IP configurados servirão como gateways padrão para os hosts nas respectivas VLANs. )
-	  D1(config)# interface vlan [10]
-	  D1(config-if)# description [Default Gateway SVI for 192.168.10.0/24]
-	  D1(config-if)# ip add [192.168.10.1 255.255.255.0]
-	  D1(config-if)# no shutdown
-	  D1(config-if)# exit
+	  D1(config)#_'interface vlan [10]'
+	  D1(config-if)#_'description [Default Gateway SVI for 192.168.10.0/24]'
+	  D1(config-if)#_'ip add [192.168.10.1 255.255.255.0]'
+	  D1(config-if)#_'no shutdown'
+	  D1(config-if)#_'exit'
 	  D1(config)#
-	  D1(config)# interface vlan [20]
-	  D1(config-if)# description [Default Gateway SVI for 192.168.20.0/24]
-	  D1(config-if)# ip add [192.168.20.1 255.255.255.0]
-	  D1(config-if)# no shut
-	  D1(config-if)# exit
+	  D1(config)#_'interface vlan [20]'
+	  D1(config-if)#_'description [Default Gateway SVI for 192.168.20.0/24]'
+	  D1(config-if)#_'ip add [192.168.20.1 255.255.255.0]'
+	  D1(config-if)#_'no shut'
+	  D1(config-if)#_'exit'
 
 	Etapa 3
 	(configurar as portas de acesso que se conectam aos hosts e atribua-as às suas respectivas VLANs.)

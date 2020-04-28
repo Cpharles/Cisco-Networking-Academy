@@ -1,0 +1,34 @@
+#Criando Vlans
+enable
+config terminal
+ vlan [VLAN_ID]
+  name [NOME ex:LAN10]
+  exit
+ vlan [VLAN_ID]
+...(repetir a quant. necessária)
+.
+
+ vlan [XX] (atribuindo a Vlan1 para outra Vlan, + segurança)
+  name [NOME 'ex:Management&Native']
+  exit
+ vlan [VLAN_ID]
+  name [NOME 'ex:VOICE']
+  end
+
+#Endereçamento das Vlans
+config terminal
+ interface f[0/X]
+  switchport mode access
+  switchport access vlan [VLAN_ID]
+  exit
+ interface f[0/X]
+...(repetir a quant. necessária)
+.
+  end
+
+#Endereçamento da Vlan Voice
+config terminal
+ interface f[0/X]
+  mls qos trust cos
+  switchport voice vlan [VLAN_ID]
+  end

@@ -1,0 +1,63 @@
+ROUTER-ON-STICK INTER-VLAN ROUTING:  Esta é uma solução aceitável para uma rede pequena e média.
+
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+(ETAPA 1)
+enable
+configure terminal
+ vlan [VLAN_ID]
+  name [NOME ex:LAN10]
+  exit
+  vlan [VLAN_ID]
+...(repetir a quant. necessária)
+.
+  vlan [99] (atribuindo a Vlan1 para outra Vlan, + segurança)
+   name [NOME 'ex:Management&Native']
+   exit
+
+(ETAPA 2)
+configure terminal
+ interface vlan [99]
+ ip address [X.X.X.x 255.255.255.0]
+ no shutdown
+ exit
+ ip default-gateway [X.X.X.x]
+
+(ETAPA 3)
+ interface fa[0/X]'
+ switchport mode access
+ switchport access vlan [VLAN_ID]
+ no shutdown
+...(repetir a quant. necessária)
+.
+ exit
+
+(ETAPA 4)
+ interface fa[0/X]
+ switchport mode trunk
+ no shutdown
+ exit
+...(repetir a quant. necessária)
+.
+ end
+
+#------------------------------------------------------------------------------------------------------------------------------------------
+
+(SUBINTERFACE NO ROTEADOR)
+enable
+interface G[X/X.x]'
+ description [ex:Default Gateway for VLAN 10]
+ encapsulation dot1Q [VLAN_ID]
+ ip address [X.X.X.x 255.255.255.0]
+ exit
+...(repetir a quant. necessária)
+.
+interface G[X/X.99]
+ description [ex:Default Gateway for VLAN 99]
+ encapsulation dot1Q [99 native]
+ ip add [X.X.X.x 255.255.255.0]
+ exit
+interface G[0/0/1]'
+ description [Trunk link to S1]'
+ no shutdown
+ end
