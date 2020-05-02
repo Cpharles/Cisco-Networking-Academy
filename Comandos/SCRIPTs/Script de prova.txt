@@ -1,0 +1,269 @@
+PART-1: Basic Router Configuration
+
+STEP-1
+====== ROUTER 1 ======
+en
+conf t
+ip route 192.168.10.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.20.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.30.0 255.255.255.0 GigabitEthernet0/0/0
+ip route 192.168.99.0 255.255.255.240 GigabitEthernet0/0/0
+no ip domain lookup
+
+enable secret ciscoEn
+
+line console 0
+ password ciscoCon
+ login
+ exit
+
+line vty 0 4
+ password ciscoVTY
+ login
+ transport input telnet
+ exit
+
+banner motd #Authorized Access Only!#
+
+hostname R-1
+
+service password-encryption
+
+interface g0/0/0
+ ip address 192.168.0.1 255.255.255.0
+ description Link to [MSW-1]
+ no shutdown
+
+interface g0/0/1
+ ip address 192.168.1.1 255.255.255.0
+ description Link to [SW-4]
+ no shutdown
+
+interface s0/1/0
+ ip address 209.165.201.2 255.255.255.252
+description Link to InternetServer
+ no shutdown
+
+ end
+show running-configure
+
+-----------------------------------------
+
+interface G0/0/1.40
+description Default Gateway for VLAN40
+encapsulation dot1Q 40
+ip add 192.168.40.1 255.255.255.0
+exit
+
+interface G0/0/1.50
+description Default Gateway for VLAN50
+encapsulation dot1Q 50
+ip add 192.168.50.1 255.255.255.0
+exit
+
+interface G0/0/1.60
+description Default Gateway for VLAN60
+encapsulation dot1Q 60
+ip add 192.168.60.1 255.255.255.0
+exit
+
+interface G0/0/1.99
+description Default Gateway for VLAN99
+encapsulation dot1Q 99 native
+ip add 192.168.99.17 255.255.255.240
+exit
+copy running-config startup-config
+
+###################################################
+
+PART-2: Basic Switch Configuration
+
+STEP-1 Configure Remote Management Addressing
+====== SWITCH - 4 ======
+en
+conf t
+hostname [SW-4]
+interface vlan 99
+ ip address 192.168.99.18 255.255.255.240
+ description Management Interface
+ no shutdown
+ exit
+ ip default-gateway 192.168.99.17
+
+-----------------------------------------
+
+STEP-2 Configure Secure Remote Access
+username admin secret C1sco123!
+ip domain-name acad.pt
+crypto key generate rsa
+ 1024
+enable secret Password
+line vty 0 15
+ transport input ssh
+ login local
+ exit
+ip ssh version 2
+
+###################################################
+
+PART-3: VLAN Configuration
+
+STEP-1 Configure VLANs
+====== SWITCH - MSW ======
+en
+conf t
+vlan 10
+ name []
+vlan 20
+ name []
+vlan 30
+ name []
+====== SWITCH - SW-2 ======
+en
+conf t
+vlan 10
+ name []
+vlan 20
+ name []
+vlan 30
+ name []
+====== SWITCH - SW-3 ======
+en
+conf t
+vlan 10
+ name []
+vlan 20
+ name []
+vlan 30
+ name []
+====== SWITCH - SW-4 ======
+en
+conf t
+vlan 40
+ name []
+vlan 50
+ name []
+vlan 60
+ name []
+vlan 99
+ name []
+
+-----------------------------------------
+
+STEP-2 Assign switch ports to VLANs
+====== SWITCH - SW-2 ======
+interface range f0/7-10
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+
+interface range f0/11-15
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+
+interface range f0/16-24
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+ exit
+
+====== SWITCH - SW-3 ======
+interface range f0/7-10
+ switchport mode access
+ switchport access vlan 10
+ no shutdown
+ exit
+
+interface range f0/11-15
+ switchport mode access
+ switchport access vlan 20
+ no shutdown
+ exit
+
+interface range f0/16-24
+ switchport mode access
+ switchport access vlan 30
+ no shutdown
+ exit
+====== SWITCH - SW-4 ======
+interface range f0/1-5
+ switchport mode access
+ switchport access vlan 40
+ no shutdown
+ exit
+
+interface range f0/6-10
+ switchport mode access
+ switchport access vlan 50
+ no shutdown
+ exit
+
+interface range f0/11-15
+ switchport mode access
+ switchport access vlan 60
+ no shutdown
+ exit
+
+interface f0/24
+ switchport mode access
+ switchport access vlan 99
+ no shutdown
+ exit
+
+###################################################
+
+PART-4: EtherChannel and Trunking Configuration
+
+STEP-1: Configure EtherChannels
+====== SWITCH - MSW ======
+->CHANNEL-1
+interface range g1/0/1-2
+ channel-group 1 mode active
+
+->CHANNEL-2
+interface range g1/0/3-4
+ channel-group 2 mode active
+
+====== SWITCH - SW-2 ======
+->CHANNEL-1
+interface range g0/1-2
+ channel-group 1 mode active
+
+->CHANNEL-3
+interface range fa0/5-6
+ channel-group 3 mode active
+
+====== SWITCH - SW-3 ======
+->CHANNEL-2
+interface range g0/1-2
+ channel-group 2 mode active
+
+->CHANNEL-3
+interface range fa0/5-6
+ channel-group 3 mode active
+
+-----------------------------------------
+
+STEP-2: Configure Trunking on the EtherChannels
+====== SWITCH - MSW ======
+interface range g1/0/1-2
+ encapsulation dot1Q [ex:10]
+ description GatewayPadrão for Vlan 
+ switchport mode trunk
+
+
+
+
+
+
+
+
+
+
+
+
+
+(VIDEO -> 25:38  https://www.youtube.com/watch?v=eP_qyfxJRtk)
