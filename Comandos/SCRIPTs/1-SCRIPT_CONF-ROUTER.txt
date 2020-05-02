@@ -1,0 +1,31 @@
+#SCRIPT - ROUTER
+
+enable secret Password
+
+line console 0
+ password cisco
+ login
+ exit
+
+line vty 0 4
+ password cisco
+ login
+ transport input telnet
+ exit
+
+banner motd #Authorized Access Only!#
+
+hostname R-1
+
+service password-encryption
+
+interface g0/0/0
+ ip address 192.168.0.1 255.255.255.0
+ no shutdown
+ description "R1 G0/0/0"
+
+interface s0/1/0
+ ip address 209.165.201.2 255.255.255.252
+ no shutdown
+ description "R1 S0/1/0"
+ exit
