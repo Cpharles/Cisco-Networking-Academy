@@ -7,55 +7,83 @@ Existem três opções de roteamento entre VLANs:
 
 1-Roteamento entre VLANs herdados:
 	Esta é uma solução herdada. Não escala bem.  "Este método de roteamento entre VLAN não é mais implementado em redes comutadas"
-2-Router-on-a-Stick:
+
+2-ROUTER-ON-STICK INTER-VLAN ROUTING:
 	Esta é uma solução aceitável para uma rede pequena e média.
-3-Switch da camada 3 usando interfaces virtuais comutadas (SVIs):
+
+3-ROTEAMENTO INTER-VLAN USANDO SWITCH LAYER 3:
 	Esta é a solução mais escalável para organizações de médio a grande porte.
+
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 2- ROUTER-ON-STICK INTER-VLAN ROUTING:
 
--> CONFIGURAÇÃO DE UM SWITCH LAYER 3:
-      Etapa 1 . Crie e nomeie as VLANs.
-      Etapa 2 . Crie a interface de gerenciamento (SVI), mas não é um passo obrigatório.
-      Passo 3 . Configure portas de acesso.
-      Etapa 4 . Configure portas de entroncamento.
+	 R1
+	 |
+	 |
+	 |
+	SW1-------SW2
+	 |	   |
+	 PC1	   PC2
+       vlan10    vlan20
 
-	Etapa 1 
-	  S1(config)#_'vlan [10]'
-	  S1(config-vlan)#_'name [LAN10]'
+2.1-> CONFIGURAÇÃO DO SWITCH:
+      Etapa 1- Criar e nomear as VLANs.
+      Etapa 2- Criar a interface de gerenciamento (SVI), mas não é um passo obrigatório.
+      Passo 3- Configurar portas de acesso.
+      Etapa 4- Configurar portas TRANK.
+
+	Etapa 1
+	  S1>_'enable'
+	  S1#_'conf t'
+	  S1(config)#_'vlan [ex:10]'
+	  S1(config-vlan)#_'name [ex:LAN10]'
 	  S1(config-vlan)#_'exit'
-	  S1(config)#_'vlan [20]'
-	  S1(config-vlan)#_'name [LAN20]'
+	  S1(config)#_'vlan [ex:20]'
+	  S1(config-vlan)#_'name [ex:LAN20]'
 	  S1(config-vlan)#_'exit'
-	  S1(config)#_'vlan [99]'
-	  S1(config-vlan)#_'name [Management]'
+	  S1(config)#_'vlan [ex:99]'
+	  S1(config-vlan)#_'name [ex:Management]'
 	  S1(config-vlan)#_'exit'
+
 	Etapa 2
-	  S1(config)#_'interface vlan [99]'
-	  S1(config-if)#_'ip add [192.168.99.2 255.255.255.0]'
+	  S1(config)#_'interface vlan [ex:99]'
+	  S1(config-if)#_'ip add [ex:192.168.99.2 255.255.255.0]'
+	  S1(config-if)#_'description [ex:VLAN 99]'
 	  S1(config-if)#_'no shut'
 	  S1(config-if)#_'exit'
-	  S1(config)#_'ip default-gateway [192.168.99.1]'
+	  S1(config)#_'ip default-gateway [ex:192.168.99.1]'
+
 	Etapa 3
-	  S1(config)#_'interface fa[0/6]'
+	  S1(config)#_'interface fa[ex:0/6]'
+	  S1(config)#_'interface range fa[ex:0/7-10] (opção para atribuir varias portas)
 	  S1(config-if)#_'switchport mode access'
-	  S1(config-if)#_'switchport access vlan [10]'
+	  S1(config-if)#_'switchport access vlan [ex:10]'
 	  S1(config-if)#_'no shut'
 	  S1(config-if)#_'exit'
+
 	Etapa 4
-	  S1(config)#_'interface fa[0/1]'
+	  S1(config)#_'interface fa[ex:0/1]'
 	  S1(config-if)#_'switchport mode trunk'
 	  S1(config-if)#_'no shut'
 	  S1(config-if)#_'exit'
-	  S1(config)#_'interface fa[0/5]'
+	  S1(config)#_'interface fa[ex:0/5]'
 	  S1(config-if)#_'switchport mode trunk'
+	  S1(config-if)#_'no shut'
+	  S1(config)#_'interface g[ex:0/1]'
+	  S1(config-if)#_'switchport mode trunk'
+	  S1(config-if)#_'switchport trunk native vlan [99]'
 	  S1(config-if)#_'no shut'
 	  S1(config-if)#_'end'
 
+	  S1# show interfaces trunk
+	  (Verificar os links de trunk ativos em um switch da Camada 2)
 
--> CONFIGURAÇÃO DA SUBINTERFACE NO ROTEADOR (R1):
-	(O método roteador no stick exige que você crie uma subinterface para cada VLAN a ser roteada.)
+	(OBS.: Repetir o bloco de configuração Etapa 1-4 para o próximo switch)
+
+
+2.2-> CONFIGURAÇÃO DA SUBINTERFACE NO ROTEADOR (R1):
+	(O método ROUTER-ON-STICK exige que você crie uma subinterface para cada VLAN a ser roteada.)
 	    >Entrar na interface
 	    >Criar as subinterface
 		-associar o DOT1Q a VLAN
@@ -63,42 +91,41 @@ Existem três opções de roteamento entre VLANs:
 	    >Entrar na interface
 		-ativar a interface
 
-	R1(config)#_'interface G[0/0.10]'
-	R1(config-subif)#_'description [Default Gateway for VLAN 10]'
-	R1(config-subif)#_'encapsulation dot1Q [10]'
-	R1(config-subif)#_'ip add [192.168.10.1 255.255.255.0]'
+	R1(config)#_'interface G[ex:0/0/1.10]'
+	R1(config-subif)#_'description [ex:Default Gateway for VLAN 10]'
+	R1(config-subif)#_'encapsulation dot1Q [ex:10]'
+	R1(config-subif)#_'ip add [ex:192.168.10.1 255.255.255.0]'
 	R1(config-subif)#_'exit'
 	R1(config)#
-	R1(config)#_'interface G[0/0/1.20]'
-	R1(config-subif)#_'description [Default Gateway for VLAN 20]'
-	R1(config-subif)#_'encapsulation dot1Q [20]'
-	R1(config-subif)#_'ip add [192.168.20.1 255.255.255.0]'
+	R1(config)#_'interface G[ex:0/0/1.20]'
+	R1(config-subif)#_'description [ex:Default Gateway for VLAN 20]'
+	R1(config-subif)#_'encapsulation dot1Q [ex:20]'
+	R1(config-subif)#_'ip add [ex:192.168.20.1 255.255.255.0]'
 	R1(config-subif)#_'exit'
 	R1(config)#
-	R1(config)#_'interface G[0/0/1.99]'
-	R1(config-subif)#_'description [Default Gateway for VLAN 99]'
-	R1(config-subif)#_'encapsulation dot1Q [99 native]'
-	R1(config-subif)#_'ip add [192.168.99.1 255.255.255.0]'
+	R1(config)#_'interface G[ex:0/0/1.99]'
+	R1(config-subif)#_'description [ex:Default Gateway for VLAN 99]'
+	R1(config-subif)#_'encapsulation dot1Q [ex:99] native'
+	R1(config-subif)#_'ip add [ex:192.168.99.1 255.255.255.0]'
 	R1(config-subif)#_'exit'
 	R1(config)#
-	R1(config)#_'interface G[0/0/1]'
-	R1(config-if)#_'description [Trunk link to S1]'
+	R1(config)#_'interface G[ex:0/0/1]'
+	R1(config-if)#_'description [ex:Trunk link to S1]'
 	R1(config-if)#_'no shut'
 	R1(config-if)#_'end'
 
--> VERIFICAÇÃO DO ROTEAMENTO ROUTER-ON-STICK INTER-VLAN:
 
-	R1# show ip route
+2.3-> VERIFICAÇÃO DO ROTEAMENTO ROUTER-ON-STICK INTER-VLAN:
+
+	R1#_'show ip route'
 	(Verifique se as subinterfaces estão aparecendo na tabela de roteamento do R1)
 
-	R1# show ip interface brief
+	R1#_'show ip interface brief'
 	(confirma que as subinterfaces têm o endereço IPv4 correto configurado e que estão operacionais.)
 
-	R1# show interfaces g0/0/1.10
+	R1#_'show interfaces g0/0/1.10'
 	(Verificando as subinterfaces)
 
-	S1# show interfaces trunk
-	(Verificar os links de trunk ativos em um switch da Camada 2)
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -106,68 +133,92 @@ Existem três opções de roteamento entre VLANs:
 	(As redes empresariais modernas raramente usam o ROUTER-ON-STICK porque não são escaláveis ​​facilmente para atender aos requisitos.
 	Nessas redes muito grandes, os administradores de rede usam switch da camada 3 para configurar o roteamento entre VLANs.)
 
--> CONFIGURANDO UM SWITCH LAYER 3:
-      Etapa 1 . Crie as VLANs.
-      Etapa 2 . Crie as interfaces SVI VLAN.
-      Passo 3 . Configure portas de acesso.
-      Etapa 4 . Habilite o roteamento IP.
+	     SWML------R1-----Svr
+	      /\
+     vlan 10 /  \ vlan 20
+            /    \
+	   PC1   PC2
+
+
+
+	     SWML------R1-----Svr
+	      |
+	      |	      
+	      |
+	     SW1
+	      /\
+     vlan 10 /  \ vlan 20
+            /    \
+	   PC1   PC2
+
+
+3.1-> CONFIGURANDO UM SWITCH LAYER 3:
+      Etapa 1- Criar as VLANs.
+      Etapa 2- Criar as interfaces SVI VLAN.
+      Passo 3- Configurar portas de acesso.
+      Passo 4- Configurar portas TRANK.
+      Etapa 5- Habilitar o roteamento IP.
 
 	Etapa 1
-	  D1(config)#_'vlan [10]'
-	  D1(config-vlan)#_'name [LAN10]'
-	  D1(config-vlan)#_'vlan [20]'
-	  D1(config-vlan)#_'name [LAN20]'
+	  D1(config)#_'vlan [ex:10]'
+	  D1(config-vlan)#_'name [ex:LAN10]'
+	  D1(config-vlan)#_'vlan [ex:20]'
+	  D1(config-vlan)#_'name [ex:LAN20]'
 	  D1(config-vlan)#_'exit'
 	  D1(config)#
 
 	Etapa 2
 	(Configurar o SVI para VLANs. Os endereços IP configurados servirão como gateways padrão para os hosts nas respectivas VLANs. )
-	  D1(config)#_'interface vlan [10]'
-	  D1(config-if)#_'description [Default Gateway SVI for 192.168.10.0/24]'
-	  D1(config-if)#_'ip add [192.168.10.1 255.255.255.0]'
+	  D1(config)#_'interface vlan [ex:10]'
+	  D1(config-if)#_'description [ex:Default Gateway SVI for 192.168.10.0/24]'
+	  D1(config-if)#_'ip add [ex:192.168.10.1 255.255.255.0]'
 	  D1(config-if)#_'no shutdown'
 	  D1(config-if)#_'exit'
 	  D1(config)#
-	  D1(config)#_'interface vlan [20]'
-	  D1(config-if)#_'description [Default Gateway SVI for 192.168.20.0/24]'
-	  D1(config-if)#_'ip add [192.168.20.1 255.255.255.0]'
+	  D1(config)#_'interface vlan [ex:20]'
+	  D1(config-if)#_'description [ex:Default Gateway SVI for 192.168.20.0/24]'
+	  D1(config-if)#_'ip add [ex:192.168.20.1 255.255.255.0]'
 	  D1(config-if)#_'no shut'
 	  D1(config-if)#_'exit'
 
 	Etapa 3
 	(configurar as portas de acesso que se conectam aos hosts e atribua-as às suas respectivas VLANs.)
-	  D1(config)# interface GigabitEthernet[1/0/6]
-	  D1(config-if)# description [Access port to PC1]
-	  D1(config-if)# switchport mode access
-	  D1(config-if)# switchport access vlan [10]
-	  D1(config-if)# exit
+	  D1(config)#_'interface GigabitEthernet[ex:0/6]'
+	  D1(config-if)#_'description [ex:Access port to PC1]'
+	  D1(config-if)#_'switchport mode access'
+	  D1(config-if)#_'switchport access vlan [ex:10]'
+	  D1(config-if)#_'exit'
 	  D1(config)#
-	  D1(config)# interface GigabitEthernet[1/0/18]
-	  D1(config-if)# description [Access port to PC2]
-	  D1(config-if)# switchport mode access
-	  D1(config-if)# switchport access vlan [20]
-	  D1(config-if)# exit
-	  Obs: Se tiver um switch de layer 3 lincado a um outro switch, devemos atribuir as portas trunk entre eles:
-	    D1(config)# interface GigabitEthernet[X/X/X]
-	    D1(config-if)# switchport trunk native
-	    D1(config-if)# switchport trunk native vlan [99]
-	    D1(config-if)# switchport trunk incapsulation dot1q
-	    D1(config-if)# end
+	  D1(config)#_'interface GigabitEthernet[ex:0/18]'
+	  D1(config-if)#_'description [ex:Access port to PC2]'
+	  D1(config-if)#_'switchport mode access'
+	  D1(config-if)#_'switchport access vlan [ex:20]'
+	  D1(config-if)#_'exit'
 
 	Etapa 4
+	  D1(config)#_'interface GigabitEthernet[ex:0/6]'
+	  D1(config-if)#_'description [ex:Trunk port to ...]'
+	  D1(config-if)#_'switchport mode trunk'
+	  D1(config-if)#_'switchport trunk native vlan [99]'
+	  D1(config-if)#_'switchport trunk encapsulation dot1q'
+	  D1(config-if)#_'no shutdown'
+	  D1(config-if)#_'end'
+	  D1(config)#_'show interfaces trunk'
+
+	Etapa 5
 	(Ativar o roteamento entre VANs em um switch da Camada 3 para IPv4.)
-	  D1(config)# ip routing
-	  D1(config)# ipv6 routing (se for o caso também)
-	  D1(config)#
+	  D1(config)# ip routing'
+	  D1(config)# ipv6 routing (se for o caso também)'
+	  D1(config)#_'end'
 
 
--> VERIFICAÇÃO DO SWITCH LAYER 3 EM UM ROTEAMENTO ENTRE VLANs:
+3.2-> VERIFICAÇÃO DO SWITCH LAYER 3 EM UM ROTEAMENTO ENTRE VLANs:
 
 	Após a conclusão da configuração, a configuração pode ser verificada testando a conectividade entre os hosts
 	atraves do comando "ping".
 
 
--> CONFIGURANDO O ROTEAMENTO EM UM SWITCH LAYER 3:
+3.3-> CONFIGURANDO O ROTEAMENTO EM UM SWITCH LAYER 3:
 
       Etapa 1 . Configure a porta roteada.
       Etapa 2 . Ativar roteamento.
@@ -175,46 +226,47 @@ Existem três opções de roteamento entre VLANs:
       Etapa 4 . Verifique o roteamento.
       Etapa 5 . Verifique a conectividade.
 
-Etapa 1
-(Configure G1 / 0/1 para ser uma porta roteada, atribua um endereço IPv4 e ative-o.)
-D1(config)# interface GigabitEthernet1/0/1
-D1(config-if)# description routed Port Link to R1
-D1(config-if)# no switchport
-D1(config-if)# ip address 10.10.10.2 255.255.255.0
-D1(config-if)# no shut
-D1(config-if)# exit
-D1(config)#
-Etapa 2
-(Ativa o roteamento IPv4)
-D1(config)# ip routing
-D1(config)#
-Etapa 3
-(Configure o protocolo de roteamento OSPF para anunciar as redes VLAN 10 e VLAN 20, juntamente com a rede conectada ao R1)
-D1(config)# router ospf 10
-D1(config-router)# network 192.168.10.0 0.0.0.255 area 0
-D1(config-router)# network 192.168.20.0 0.0.0.255 area 0
-D1(config-router)# network 10.10.10.0 0.0.0.3 area 0
-D1(config-router)# ^Z
-D1#
-*Sep 17 13:52:51.163: %OSPF-5-ADJCHG: Process 10, Nbr 10.20.20.1 on GigabitEthernet1/0/1 from LOADING to FULL, Loading Done
-D1#
-Etapa 4
-(Verifique a tabela de roteamento em D1)
-D1# show ip route | begin Gateway
-Gateway of last resort is not set
-      10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks
-C        10.10.10.0/30 is directly connected, GigabitEthernet1/0/1
-L        10.10.10.2/32 is directly connected, GigabitEthernet1/0/1
-O        10.20.20.0/24 [110/2] via 10.10.10.1, 00:00:06, GigabitEthernet1/0/1
-      192.168.10.0/24 is variably subnetted, 2 subnets, 2 masks
-C        192.168.10.0/24 is directly connected, Vlan10
-L        192.168.10.1/32 is directly connected, Vlan10
-      192.168.20.0/24 is variably subnetted, 2 subnets, 2 masks
-C        192.168.20.0/24 is directly connected, Vlan20
-L        192.168.20.1/32 is directly connected, Vlan20
-D1#
-Etapa 5
-No promt comand executar o comando "ping" entre host
+	Etapa 1
+	(Configurar a porta G[1/0/1] para ser uma porta roteada, atribua um endereço IPv4 e ative-o.)
+	  D1(config)#_'interface GigabitEthernet[ex:1/0/1]'
+	  D1(config-if)#_'description [ex:routed Port Link to R1]'
+	  D1(config-if)#_'no switchport'
+	  D1(config-if)#_'ip address [ex:10.10.10.2 255.255.255.0]'
+	  D1(config-if)#_'no shut
+	  D1(config-if)#_'exit'
+
+	Etapa 2
+	(Ativa o roteamento IPv4)
+	  D1(config)#_'ip routing'
+	  D1(config)#
+
+	Etapa 3
+	(Configure o protocolo de roteamento OSPF para anunciar as redes VLAN 10 e VLAN 20, juntamente com a rede conectada ao R1)
+	  D1(config)#_'router ospf [ex:10]'
+	  D1(config-router)#_'network [ex:192.168.10.0 0.0.0.255 area 0]'
+	  D1(config-router)#_'network [ex:192.168.20.0 0.0.0.255 area 0]'
+	  D1(config-router)#_'network [ex:10.10.10.0 0.0.0.3 area 0]'
+	  D1(config-router)#_'^Z'
+	  *Sep 17 13:52:51.163: %OSPF-5-ADJCHG: Process 10, Nbr 10.20.20.1 on GigabitEthernet1/0/1 from LOADING to FULL, Loading Done
+
+	Etapa 4
+	(Verifique a tabela de roteamento em D1)
+	  D1# show ip route | begin Gateway
+	  Gateway of last resort is not set
+	        10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks
+	  C        10.10.10.0/30 is directly connected, GigabitEthernet1/0/1
+	  L        10.10.10.2/32 is directly connected, GigabitEthernet1/0/1
+	  O        10.20.20.0/24 [110/2] via 10.10.10.1, 00:00:06, GigabitEthernet1/0/1
+        	192.168.10.0/24 is variably subnetted, 2 subnets, 2 masks
+	  C        192.168.10.0/24 is directly connected, Vlan10
+	  L        192.168.10.1/32 is directly connected, Vlan10
+        	192.168.20.0/24 is variably subnetted, 2 subnets, 2 masks
+	  C        192.168.20.0/24 is directly connected, Vlan20
+	  L        192.168.20.1/32 is directly connected, Vlan20
+
+
+	Etapa 5
+	No promt comand executar o comando "ping" entre host
 
 
 

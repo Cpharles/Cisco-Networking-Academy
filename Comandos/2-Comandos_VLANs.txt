@@ -43,7 +43,7 @@
 	(esta configuração é feito no modo global)
 	Switch>_'enable'
 	Switch#_'config terminal'
-	Switch(config)#_'vlan [vlan-id_10/20/30...]  (cria a Vlan com um numero valido. Aqui pode colocar todas as vlan desejada)
+	Switch(config)#_'vlan [vlan-id_10/20/30...]  (cria a Vlan com um numero da rede)
 	Switch(config-vlan)#_'name [vlan-name]   (especifica um nome para a Vlan)
 	Switch(config-vlan)#_'exit'
 -> CONFIGURANDO O ENDEREÇAMENTO DAS POSTAS DE ACESSO PARA A VLAN

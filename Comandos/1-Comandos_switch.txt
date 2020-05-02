@@ -80,9 +80,9 @@
 	Switch>_'enable'
 	Switch#_'conf terminal'
 	Switch(config)#_'interface vlan 1'
-	Switch(config-if)#_'ip address [IP address] [Mask]'    exemplo.:192.168.1.10 255.255.255.0
-	Switch(config-if)#_'ipv6 address [IPv6 address]'       exemplo.:2001:db8:acad:99::1/64
-	Switch(config-if)#_'description [texto]'	       exemplo: texto - Link to LAN-10
+	Switch(config-if)#_'ip address [IP address] [Mask]'    exemplo: 192.168.1.10 255.255.255.0
+	Switch(config-if)#_'ipv6 address [IPv6 address]'       exemplo: 2001:db8:acad:99::1/64
+	Switch(config-if)#_'description [texto]'	       exemplo: Link to LAN-10
 	Switch(config-if)#_'no shutdown' (para ativar a interface virtual no caso o VLAN 1, por padrão esta desativada)
 	Switch(config-if)#_'exit'
 	Switch(config)#_'exit'
