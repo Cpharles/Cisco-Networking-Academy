@@ -1,31 +1,38 @@
 enable
 config terminal
+
 hostname [NOME1]
+
 line console 0
  password [SENHA]
  exec-timeout 30
  login
  exit
+
 enable password [SENHA1]
 service password-encryption
 enable secret [SENHA2]
+
 banner motd #*********************************************************
 *                                                       *
 *****     ACESSO AUTORIZADO SOMENTE PARA TÉCNICOS   *****
 *                                                       *
 *********************************************************#
+
 interface vlan 1
  ip address [IP ADDRESS] [MASK]
  ipv6 address [IPv6 ADDRESS]
  description [TEXTO]
  no shutdown
  exit
+
 line vty 0 15
  password [SENHA]
  exec-timeout 30
  login
  transport input telnet
  exit
+
 ip default-gateway [IP]
 exit
 exit
