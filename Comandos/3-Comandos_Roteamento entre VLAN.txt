@@ -29,7 +29,7 @@ Existem três opções de roteamento entre VLANs:
 
 2.1-> CONFIGURAÇÃO DO SWITCH:
       Etapa 1- Criar e nomear as VLANs.
-      Etapa 2- Criar a interface de gerenciamento (SVI), mas não é um passo obrigatório.
+      Etapa 2- Criar a interface de gerenciamento SVI, (não é um passo obrigatório, pois a vlan 1 é padrão)
       Passo 3- Configurar portas de acesso.
       Etapa 4- Configurar portas TRANK.
 
@@ -44,7 +44,8 @@ Existem três opções de roteamento entre VLANs:
 	  S1(config-vlan)#_'exit'
 	  S1(config)#_'vlan [ex:99]'
 	  S1(config-vlan)#_'name [ex:Management]'
-	  S1(config-vlan)#_'exit'
+	  S1(config-vlan)#_'end'
+	  S1#_'show vlan brief' (check)
 
 	Etapa 2
 	  S1(config)#_'interface vlan [ex:99]'
@@ -78,8 +79,6 @@ Existem três opções de roteamento entre VLANs:
 
 	  S1# show interfaces trunk
 	  (Verificar os links de trunk ativos em um switch da Camada 2)
-
-	(OBS.: Repetir o bloco de configuração Etapa 1-4 para o próximo switch)
 
 
 2.2-> CONFIGURAÇÃO DA SUBINTERFACE NO ROTEADOR (R1):
@@ -153,105 +152,127 @@ Existem três opções de roteamento entre VLANs:
 
 
 3.1-> CONFIGURANDO UM SWITCH LAYER 3:
-      Etapa 1- Criar as VLANs.
-      Etapa 2- Criar as interfaces SVI VLAN.
-      Passo 3- Configurar portas de acesso.
-      Passo 4- Configurar portas TRANK.
-      Etapa 5- Habilitar o roteamento IP.
+      ETAPA 1- Criar as VLANs
+      ETAPA 2- Criar as interfaces SVI VLAN
+      ETAPA 3- Configurar portas TRANK
+      ETAPA 4- Configurar portas de acesso
+      ETAPA 5- Habilitar o roteamento IP
 
-	Etapa 1
-	  D1(config)#_'vlan [ex:10]'
-	  D1(config-vlan)#_'name [ex:LAN10]'
-	  D1(config-vlan)#_'vlan [ex:20]'
-	  D1(config-vlan)#_'name [ex:LAN20]'
-	  D1(config-vlan)#_'exit'
-	  D1(config)#
+	ETAPA 1
+	  SWML(config)#_'vlan [ex:10]'
+	  SWML(config-vlan)#_'name [ex:LAN10]'
+	  SWML(config-vlan)#_'exit'
+	  ...(repetir a quant. necessária)
 
-	Etapa 2
-	(Configurar o SVI para VLANs. Os endereços IP configurados servirão como gateways padrão para os hosts nas respectivas VLANs. )
-	  D1(config)#_'interface vlan [ex:10]'
-	  D1(config-if)#_'description [ex:Default Gateway SVI for 192.168.10.0/24]'
-	  D1(config-if)#_'ip add [ex:192.168.10.1 255.255.255.0]'
-	  D1(config-if)#_'no shutdown'
-	  D1(config-if)#_'exit'
-	  D1(config)#
-	  D1(config)#_'interface vlan [ex:20]'
-	  D1(config-if)#_'description [ex:Default Gateway SVI for 192.168.20.0/24]'
-	  D1(config-if)#_'ip add [ex:192.168.20.1 255.255.255.0]'
-	  D1(config-if)#_'no shut'
-	  D1(config-if)#_'exit'
+	ETAPA 2 (IPv4)
+	(Configurar o SVI para VLANs, lembrando que esta VSI não é a mesma em um switch layer 2. Nos switch layer3 o endereços IP
+	configurados servirão como gateways padrão para os hosts nas respectivas VLANs)
+	  SWML(config)#_'interface vlan [ex:10]'
+	  SWML(config-if)#_'description [ex:Default Gateway SVI IPv4 for 192.168.10.0/24]'
+	  SWML(config-if)#_'ip add [ex:192.168.10.1 255.255.255.0]'
+	  SWML(config-if)#_'no shutdown'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+	  SWML#_'show ip route' (check)
 
-	Etapa 3
-	(configurar as portas de acesso que se conectam aos hosts e atribua-as às suas respectivas VLANs.)
-	  D1(config)#_'interface GigabitEthernet[ex:0/6]'
-	  D1(config-if)#_'description [ex:Access port to PC1]'
-	  D1(config-if)#_'switchport mode access'
-	  D1(config-if)#_'switchport access vlan [ex:10]'
-	  D1(config-if)#_'exit'
-	  D1(config)#
-	  D1(config)#_'interface GigabitEthernet[ex:0/18]'
-	  D1(config-if)#_'description [ex:Access port to PC2]'
-	  D1(config-if)#_'switchport mode access'
-	  D1(config-if)#_'switchport access vlan [ex:20]'
-	  D1(config-if)#_'exit'
+	ETAPA 2.1 (IPv6)
+	  SWML(config)#_'ipv6 unicast-routing' (abilitando o roteamento IPv6)
+	  SWML(config-if)#_'interface vlan [10]'
+	  SWML(config-if)#_'description [ex:Default Gateway SVI IPv6 for 2001:db8:acad:a::1/64]'
+	  SWML(config-if)#_'ipv6 address [ex:2001:db8:acad:a::1/64]'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+	  SWML#_'show ipv6 route' (check)
 
-	Etapa 4
-	  D1(config)#_'interface GigabitEthernet[ex:0/6]'
-	  D1(config-if)#_'description [ex:Trunk port to ...]'
-	  D1(config-if)#_'switchport mode trunk'
-	  D1(config-if)#_'switchport trunk native vlan [99]'
-	  D1(config-if)#_'switchport trunk encapsulation dot1q'
-	  D1(config-if)#_'no shutdown'
-	  D1(config-if)#_'end'
-	  D1(config)#_'show interfaces trunk'
+	ETAPA 3
+	(configurar as portas trunk - link entre switchs/router)
+	  SWML(config)#_'interface GigabitEthernet[ex:0/6]'
+	  SWML(config-if)#_'description [ex:Trunk port to ...]'
+	  SWML(config-if)#_'switchport mode trunk'
+	  SWML(config-if)#_'switchport trunk native vlan [99]'
+	  SWML(config-if)#_'switchport trunk encapsulation dot1q'
+	  SWML(config-if)#_'no shutdown'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+	  SWML#_'show interfaces trunk' (check)
 
-	Etapa 5
-	(Ativar o roteamento entre VANs em um switch da Camada 3 para IPv4.)
-	  D1(config)# ip routing'
-	  D1(config)# ipv6 routing (se for o caso também)'
-	  D1(config)#_'end'
+	ETAPA 4
+	(configurar as portas de acesso que se conectam aos hosts e atribua-as às suas respectivas VLANs)
+	  SWML(config)#_'interface GigabitEthernet[ex:0/6]'
+	  SWML(config-if)#_'description [ex:Access port to PC1]'
+	  SWML(config-if)#_'switchport mode access'
+	  SWML(config-if)#_'switchport access vlan [ex:10]'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+
+	ETAPA 5
+	(Ativar o roteamento entre VANs em um switch da Camada 3 para IPv4)
+	  SWML(config)#_'ip routing'
+	  SWML(config)#_'ipv6 routing' (se for o caso também)'
+	  SWML(config)#_'end'
+
 
 
 3.2-> VERIFICAÇÃO DO SWITCH LAYER 3 EM UM ROTEAMENTO ENTRE VLANs:
 
-	Após a conclusão da configuração, a configuração pode ser verificada testando a conectividade entre os hosts
-	atraves do comando "ping".
+	Após a conclusão da configuração, verefique a conectividade testando entre os hosts atraves do comando "ping".
+
 
 
 3.3-> CONFIGURANDO O ROTEAMENTO EM UM SWITCH LAYER 3:
 
-      Etapa 1 . Configure a porta roteada.
-      Etapa 2 . Ativar roteamento.
-      Passo 3 . Configure o roteamento.
-      Etapa 4 . Verifique o roteamento.
-      Etapa 5 . Verifique a conectividade.
+      ETAPA 1- Configure a porta roteada
+      ETAPA 2- Ativar roteamento
+      ETAPA 3- Configure o roteamento
+      ETAPA 4- Verifique o roteamento
+      ETAPA 5- Verifique a conectividade
 
-	Etapa 1
-	(Configurar a porta G[1/0/1] para ser uma porta roteada, atribua um endereço IPv4 e ative-o.)
-	  D1(config)#_'interface GigabitEthernet[ex:1/0/1]'
-	  D1(config-if)#_'description [ex:routed Port Link to R1]'
-	  D1(config-if)#_'no switchport'
-	  D1(config-if)#_'ip address [ex:10.10.10.2 255.255.255.0]'
-	  D1(config-if)#_'no shut
-	  D1(config-if)#_'exit'
+	ETAPA 1 (IPv4)
+	(Configurar as portas para ser uma porta roteada)
+	  SWML(config)#_'interface GigabitEthernet/FastEthernet[ex:0/1]'
+	  SWML(config-if)#_'description [ex:Routed Port Link to R1]'
+	  SWML(config-if)#_'no switchport'
+	  SWML(config-if)#_'ip address [ex:10.10.10.2 255.255.255.0]'
+	  SWML(config-if)#_'no shutdown'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+	  SWML#_'show ip route'	 (check)
 
-	Etapa 2
-	(Ativa o roteamento IPv4)
-	  D1(config)#_'ip routing'
-	  D1(config)#
+	ETAPA 1.1 (IPv6)
+	  SWML(config)#_'interface G[0/1]'
+	  SWML(config-if)#_'description [ex: Routed Port to...]'
+	  SWML(config-if)#_'ipv6 address [2001:db8:acad:a::1/64]'
+	  SWML(config-if)#_'no shutdown'
+	  SWML(config-if)#_'exit'
+	  ...(repetir a quant. necessária)
+	  SWML(config-if)#_'end'
+	  SWML#_'show ipv6 route'  (check)
 
-	Etapa 3
+	ETAPA 2 (IPv4)
+	(Ativa o roteamento)
+	  SWML(config)#_'ip routing'
+
+	ETAPA 2.2 (IPv6)
+	(Ativa o roteamento)
+	  SWML(config)#_'ipv6 routing'
+
+	ETAPA 3
 	(Configure o protocolo de roteamento OSPF para anunciar as redes VLAN 10 e VLAN 20, juntamente com a rede conectada ao R1)
-	  D1(config)#_'router ospf [ex:10]'
-	  D1(config-router)#_'network [ex:192.168.10.0 0.0.0.255 area 0]'
-	  D1(config-router)#_'network [ex:192.168.20.0 0.0.0.255 area 0]'
-	  D1(config-router)#_'network [ex:10.10.10.0 0.0.0.3 area 0]'
-	  D1(config-router)#_'^Z'
+	  SWML(config)#_'router ospf [ex:10]'
+	  SWML(config-router)#_'network [ex:192.168.10.0 0.0.0.255 area 0]'
+	  SWML(config-router)#_'network [ex:192.168.20.0 0.0.0.255 area 0]'
+	  SWML(config-router)#_'network [ex:10.10.10.0 0.0.0.3 area 0]'
+	  SWML(config-router)#_'^Z'
 	  *Sep 17 13:52:51.163: %OSPF-5-ADJCHG: Process 10, Nbr 10.20.20.1 on GigabitEthernet1/0/1 from LOADING to FULL, Loading Done
 
-	Etapa 4
-	(Verifique a tabela de roteamento em D1)
-	  D1# show ip route | begin Gateway
+	ETAPA 4
+	(Verifique a tabela de roteamento em SWML)
+	  SWML#_'show ip route'
 	  Gateway of last resort is not set
 	        10.0.0.0/8 is variably subnetted, 3 subnets, 3 masks
 	  C        10.10.10.0/30 is directly connected, GigabitEthernet1/0/1
@@ -265,8 +286,8 @@ Existem três opções de roteamento entre VLANs:
 	  L        192.168.20.1/32 is directly connected, Vlan20
 
 
-	Etapa 5
-	No promt comand executar o comando "ping" entre host
+	ETAPA 5
+	Após a conclusão da configuração, verefique a conectividade testando entre os hosts atraves do comando "ping".
 
 
 
